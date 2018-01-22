@@ -89,12 +89,12 @@ public class ECommerce_AddFurnitureToListServlet extends HttpServlet {
     }
 
     public ArrayList<ShoppingCartLineItem> addNewItem(ShoppingCartLineItem newItem, ArrayList<ShoppingCartLineItem> shoppingCart) {
-        shoppingCart.add(newItem);
+        shoppingCart.add(newItem);	//Adds Item to Cart
         return shoppingCart;
     }
     
     public ShoppingCartLineItem addItemQuantity(ShoppingCartLineItem item) {
-        item.setQuantity(item.getQuantity()+1);
+        item.setQuantity(item.getQuantity()+1);	//Increase Item Quantity
         return item;
     }
     
