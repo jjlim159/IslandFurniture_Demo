@@ -1,6 +1,6 @@
 <%
-    String errMsg = request.getParameter("errMsg");
-    String goodMsg = request.getParameter("goodMsg");
+    String errMsg = (String)session.getAttribute("errMsg");
+    String goodMsg = (String)session.getAttribute("goodMsg");
 %>
 <div class="row">
     <div class="col-lg-12">
