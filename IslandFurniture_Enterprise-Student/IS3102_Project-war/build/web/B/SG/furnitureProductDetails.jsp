@@ -11,17 +11,19 @@
 <%
     String sku = request.getParameter("sku");
     if (sku == null) {
+        
 %>
 <jsp:forward page="index.jsp" />
 <%
     }
     Boolean isMemberLoggedIn = false;
-    String memberEmail = (String) (session.getAttribute("memberEmail"));
+    String memberEmail = (String) (session.getAttribute("email"));
     if (memberEmail == null) {
         isMemberLoggedIn = false;
     } else {
         isMemberLoggedIn = true;
     }
+    
 %>
 <html> <!--<![endif]-->
     <jsp:include page="header.html" />
@@ -29,8 +31,35 @@
         <%
             List<StoreEntity> storesInCountry = (List<StoreEntity>) session.getAttribute("storesInCountry");
             List<Furniture> furnitures = (List<Furniture>) (session.getAttribute("furnitures"));
+            
             /*define your variables here*/
+            String id = "";
+            String name = "";
+            String category = "";
+            String imageUrl = "";
+            String SKU = "";
+            String description = "";
+            Integer length = 0;
+            Integer width = 0;
+            Integer height = 0;
+            Double price = 0.00;
+            
             /*set your variables here*/
+            for (Furniture furniture: furnitures) {
+                if (furniture.getSKU().equals(sku)) {
+                    id = furniture.getId().toString();
+                    name = furniture.getName();
+                    category = furniture.getCategory();
+                    imageUrl = furniture.getImageUrl();
+                    SKU = furniture.getSKU();
+                    description = furniture.getDescription();
+                    height = furniture.getHeight();
+                    length = furniture.getLength();
+                    width = furniture.getWidth();
+                    price = furniture.getPrice();
+                }
+            }
+            
         %>
         <div class="body">
             <jsp:include page="menu2.jsp" />
@@ -40,7 +69,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h2>Furnitures</h2>
+                                    <h2>Furniture</h2>
                                 </div>
                             </div>
                         </div>
@@ -51,37 +80,37 @@
                             <div class="col-md-6">
                                 <div>
                                     <div class="thumbnail">
-                                        <img alt="" class="img-responsive img-rounded" src="../../..<%/*insert code here*/%>">
+                                        <img alt="" class="img-responsive img-rounded" src="../../..<%=imageUrl%>">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="summary entry-summary">
-                                    <h2 class="shorter"><strong>Insert category name</strong></h2>
+                                    <h2 class="shorter"><strong><%=name%></strong></h2>
                                     <%
                                         if (isMemberLoggedIn == true) {
                                     %>
                                     <form action="../../ECommerce_AddFurnitureToListServlet">
-                                        <input type="hidden" name="id" value="<%/*insert code here*/%>"/>
-                                        <input type="hidden" name="SKU" value="<%/*insert code here*/%>"/>
-                                        <input type="hidden" name="price" value="<%/*insert code here*/%>"/>
-                                        <input type="hidden" name="name" value="<%/*insert code here*/%>"/>
-                                        <input type="hidden" name="imageURL" value="<%/*insert code here*/%>"/>
-                                        <input type="submit" name="btnEdit" class="btn btn-primary" id="<%/*insert code here*/%>" value="Add To Cart"/>
+                                        <input type="hidden" name="id" value="<%=id%>"/>
+                                        <input type="hidden" name="SKU" value="<%=SKU%>"/>
+                                        <input type="hidden" name="price" value="<%=price%>"/>
+                                        <input type="hidden" name="name" value="<%=name%>"/>
+                                        <input type="hidden" name="imageURL" value="<%=imageUrl%>"/>
+                                        <input type="submit" name="btnEdit" class="btn btn-primary" value="Add To Cart"/>
                                     </form>
                                     <%}%>
-                                    <p class="price"><h4 class="amount"><%/*insert code here*/%></h4></p>
+                                    <p class="price"><h4 class="amount"><%=price + "0"%></h4></p>
                                     <strong>Description</strong>
                                     <p class="taller">
-                                        <%/*insert code here*/%>
+                                        <%=description%>
                                     </p>
                                     <p>
-                                        Height: <%/*insert code here*/%><br/>
-                                        Length: <%/*insert code here*/%><br/>
-                                        Width: <%/*insert code here*/%>
+                                        Height: <%=height%><br/>
+                                        Length: <%=length%><br/>
+                                        Width: <%=width%>
                                     </p>
                                     <div class="product_meta">
-                                        <span class="posted_in">Category: <a rel="tag" href="../../ECommerce_FurnitureCategoryServlet?cat=<%/*insert code here*/%>"><%/*insert code here*/%></a></span>
+                                        <span class="posted_in">Category: <a rel="tag" href="../../ECommerce_FurnitureCategoryServlet?cat=<%=category%>"><%=category%></a></span>
                                     </div>
                                     <br/><br/>
 
