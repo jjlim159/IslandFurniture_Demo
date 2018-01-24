@@ -29,28 +29,32 @@ public class ECommerce_RemoveItemFromListServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try {
-           HttpSession session = request.getSession();
-           List<ShoppingCartLineItem> shoppingCart = (List<ShoppingCartLineItem>) session.getAttribute("shoppingCart");
-           
-           String[] skuList = request.getParameterValues("delete");
-           removeItem(shoppingCart, skuList);
-           
-           session.setAttribute("shoppingCart", shoppingCart);
-           session.setAttribute("goodMsg", "Item Successfully Removed From Cart");
-           response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp");
+            HttpSession session = request.getSession();
+            ArrayList<ShoppingCartLineItem> shoppingCart = (ArrayList<ShoppingCartLineItem>) session.getAttribute("shoppingCart");
+
+            String[] skuList = request.getParameterValues("delete");
+            
+            if (skuList.length == shoppingCart.size()) {
+                shoppingCart.clear();
+            } else {
+                for (ShoppingCartLineItem item: shoppingCart) {
+                    for(String sku: skuList) {
+                        if (item.getSKU().equalsIgnoreCase(sku)) {
+                            shoppingCart.remove(item);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            session.setAttribute("shoppingCart", shoppingCart);
+            session.setAttribute("goodMsg", "Item Successfully Removed From Cart");
+            response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp");
         } catch(Exception ex) {
             
         }
     }
-
-    public void removeItem(List<ShoppingCartLineItem> shoppingCart, String[] skuList) {
-        for (ShoppingCartLineItem item: shoppingCart) {
-               for (String sku: skuList) {
-                   if (item.getSKU().equals(sku))
-                       shoppingCart.remove(item);
-               }
-           }
-    }
+    
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

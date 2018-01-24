@@ -32,41 +32,22 @@ public class ECommerce_MinusFurnitureToListServlet extends HttpServlet {
             HttpSession session = request.getSession();
             String sku = request.getParameter("SKU");
             ArrayList<ShoppingCartLineItem> shoppingCart = (ArrayList<ShoppingCartLineItem>) session.getAttribute("shoppingCart");
-            minusQuantity(shoppingCart,sku);
             
-            session.setAttribute("goodMsg", null);
+            for (ShoppingCartLineItem item: shoppingCart) {
+                if (item.getSKU().equals(sku)) {
+                    if (item.getQuantity() == 1)
+                        shoppingCart.remove(item);
+                    else
+                        item.setQuantity(item.getQuantity()-1);
+                }
+            }
+            
+            session.setAttribute("goodMsg", "Item quantity successfully reduced");
             session.setAttribute("shoppingCart", shoppingCart);
             response.sendRedirect("/IS3102_Project-war/B/SG/shoppingCart.jsp");
         } catch(Exception ex) {
         }
     }
-
-    public void minusQuantity(ArrayList<ShoppingCartLineItem> shoppingCart, String sku) {
-        for (ShoppingCartLineItem item: shoppingCart) {
-            if (item.getSKU().equals(sku)) {
-                if (item.getQuantity() == 1)
-                    shoppingCart.remove(item);
-                else
-                    item.setQuantity(item.getQuantity()-1);
-            }
-        }
-    }
-    
-    /*
-    public boolean minusQuantity(ArrayList<ShoppingCartLineItem> shoppingCart, String sku, int index) {
-        ShoppingCartLineItem item = shoppingCart.get(index);
-        if (item.getSKU().equals(sku)) {
-            if (item.getQuantity() == 1) {
-                shoppingCart.remove(item);
-            }
-            else {
-                item.setQuantity(item.getQuantity()-1);
-            }
-            return true;
-        } else {
-            return minusQuantity(shoppingCart, sku, index+1);
-        }
-    }*/
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
